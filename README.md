@@ -55,6 +55,14 @@ docker compose logs -f odp-mcp
 
 To stop it, run `docker compose down`. After changing the source code, run `docker compose up -d --build` again.
 
+### Prebuilt image
+
+Every push to `main` publishes a multi-arch image (`linux/amd64`, `linux/arm64`) to the GitHub Container Registry, tagged `latest` and `sha-<short commit>`. To run it without cloning the repo:
+
+```sh
+docker run -d --name odp-mcp --restart unless-stopped -p 127.0.0.1:3000:3000 ghcr.io/jacobpretorius/opti.odp.mcp:latest
+```
+
 ### Optional operator settings
 
 No settings are required. `ODP_MCP_AUTH_TOKEN` is a secret, so put it in a `.env` file next to `docker-compose.yml` (the file is gitignored and Compose reads it automatically), as `ODP_MCP_AUTH_TOKEN=<long random string>`. Set the others under `environment:` in `docker-compose.yml`:
