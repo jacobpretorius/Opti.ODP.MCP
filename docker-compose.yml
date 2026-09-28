@@ -1,0 +1,19 @@
+# Long-running, multi-client ODP MCP server: `docker compose up -d --build`.
+# Endpoint: http://localhost:3000/mcp. Clients send their own ODP credentials on every request:
+#   X-ODP-API-Key: <ODP private API key>     (required)
+#   X-ODP-Region:  us | eu | au              (optional, default us)
+services:
+  odp-mcp:
+    build: .
+    image: odp-mcp
+    container_name: odp-mcp
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3000:3000"
+    # Optional operator settings (none are required).
+    environment:
+      # Server token: if set, clients must also send "Authorization: Bearer <token>". It is a secret, so do not
+      # write it here; put `ODP_MCP_AUTH_TOKEN=<long random string>` in a .env file next to this one (gitignored).
+      ODP_MCP_AUTH_TOKEN: ${ODP_MCP_AUTH_TOKEN:-}
+      # ODP_MCP_ALLOW_MUTATIONS: "true"   # allow GraphQL mutations
+      # ODP_MCP_ENABLE_EXPORTS: "false"   # hide the export-job start tools
